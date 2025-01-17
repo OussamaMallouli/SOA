@@ -34,7 +34,7 @@ public class TechnologieController {
     private static Connection conn = DBConnection.getConnection();
     
     private static Date dateFormat(String dateString) {
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Date date = new Date(formatter.parse(dateString).getTime());
 			return date;
@@ -62,7 +62,8 @@ public class TechnologieController {
                     resultSet.getString("description"),
                     resultSet.getString("plateformSupporte"),
                     resultSet.getString("siteWeb"),
-                    resultSet.getDate("dateDerniereMAJ")
+                    resultSet.getDate("dateDerniereMAJ"),
+                    resultSet.getString("logo")
                 );
                 technologies.add(t);
             }
@@ -93,7 +94,9 @@ public class TechnologieController {
                         resultSet.getString("description"),
                         resultSet.getString("plateformSupporte"),
                         resultSet.getString("siteWeb"),
-                        resultSet.getDate("dateDerniereMAJ")
+                        resultSet.getDate("dateDerniereMAJ"),
+                        resultSet.getString("logo")
+                        
                     );
                     technologies.add(t);
                 }
@@ -122,7 +125,8 @@ public class TechnologieController {
                     resultSet.getString("description"),
                     resultSet.getString("plateformSupporte"),
                     resultSet.getString("siteWeb"),
-                    resultSet.getDate("dateDerniereMAJ")
+                    resultSet.getDate("dateDerniereMAJ"),
+                    resultSet.getString("logo")
                 );
                 return Response.ok(t).build();
             } else {
@@ -147,7 +151,8 @@ public class TechnologieController {
         String description = request.get("description");
         String platforme = request.get("plateformSupporte");
         String siteWeb = request.get("siteWeb");
-        java.sql.Date dateDerniereMAJ = request.get("dateDerniereMAJ")!= null? dateFormat(request.get("dateDerniereMAJ"))
+        String logo = request.get("logo");
+        Date dateDerniereMAJ = request.get("dateDerniereMAJ")!= null? dateFormat(request.get("dateDerniereMAJ"))
         		:null;
 
         if (nom == null || nom.isEmpty()) {
@@ -156,7 +161,7 @@ public class TechnologieController {
                     .build();
         }
 
-        String query = "INSERT INTO technologie (nomTech, version, description, plateformSupporte, siteWeb, dateDerniereMAJ) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO technologie (nomTech, version, description, plateformSupporte, siteWeb, dateDerniereMAJ, logo) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, nom);
             stmt.setString(2, version);
@@ -164,6 +169,7 @@ public class TechnologieController {
             stmt.setString(4, platforme);
             stmt.setString(5, siteWeb);
             stmt.setDate(6, dateDerniereMAJ);
+            stmt.setString(7, logo);
             stmt.executeUpdate();
             return Response.status(Response.Status.CREATED)
                     .entity("{\"message\":\"Technologie created successfully!\"}")
@@ -186,7 +192,8 @@ public class TechnologieController {
         String description = request.get("description");
         String platforme = request.get("plateformSupporte");
         String siteWeb = request.get("siteWeb");
-        java.sql.Date dateDerniereMAJ = request.get("dateDerniereMAJ")!= null? dateFormat(request.get("dateDerniereMAJ"))
+        String logo = request.get("logo");
+        Date dateDerniereMAJ = request.get("dateDerniereMAJ")!= null? dateFormat(request.get("dateDerniereMAJ"))
         		:null;
 
 
@@ -196,7 +203,7 @@ public class TechnologieController {
                     .build();
         }
 
-        String query = "UPDATE technologie SET nomTech = ?, version = ?, description = ?, plateformSupporte = ?, siteWeb = ?, dateDerniereMAJ = ? WHERE id = ?";
+        String query = "UPDATE technologie SET nomTech = ?, version = ?, description = ?, plateformSupporte = ?, siteWeb = ?, dateDerniereMAJ = ?, logo = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, nom);
             stmt.setString(2, version);
@@ -204,7 +211,8 @@ public class TechnologieController {
             stmt.setString(4, platforme);
             stmt.setString(5, siteWeb);
             stmt.setDate(6, dateDerniereMAJ);
-            stmt.setInt(7, id);
+            stmt.setString(7, logo);
+            stmt.setInt(8, id);
             int rowsUpdated = stmt.executeUpdate();
             if (rowsUpdated > 0) {
                 return Response.ok("{\"message\":\"Technologie updated successfully!\"}").build();
@@ -225,6 +233,15 @@ public class TechnologieController {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteTechnologie(@PathParam("id") int id) {
+    	 String query1 = "DELETE FROM entreprise_technologie WHERE id_tech = ?;";
+		try {
+			PreparedStatement stmt1 = conn.prepareStatement(query1);
+			stmt1.setInt(1, id);
+            stmt1.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+             
         String query = "DELETE FROM technologie WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);

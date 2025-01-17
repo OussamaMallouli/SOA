@@ -8,10 +8,10 @@
 	<artifactId>backend</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>tp3</name>
+	<name>backend</name>
 
 	<build>
-		<finalName>Projet</finalName>
+		<finalName>backend</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -51,7 +51,7 @@
 			compatibility -->
 			<!-- artifactId>jersey-container-servlet</artifactId -->
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.glassfish.jersey.inject</groupId>
 			<artifactId>jersey-hk2</artifactId>
@@ -66,7 +66,17 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.30</version> <!-- replace with the latest version -->
 		</dependency>
-
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version> <!-- ou une version plus récente -->
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.4</version>
+		</dependency>
 	</dependencies>
 	<properties>
 		<jersey.version>4.0.0-M1</jersey.version>

@@ -1,8 +1,7 @@
 package iit.project;
 
 import java.sql.Connection;
-
-import java.util.Date;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,10 +34,10 @@ public class EntrepriseController {
 
 	private static Connection conn = DBConnection.getConnection();
 
-	private static java.sql.Date dateFormat(String dateString) {
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+	private static Date dateFormat(String dateString) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			java.sql.Date date = new java.sql.Date(formatter.parse(dateString).getTime());
+			Date date = new Date(formatter.parse(dateString).getTime());
 			return date;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -105,7 +104,7 @@ public class EntrepriseController {
 		String numTel = (String) request.get("numTel");
 		String description = (String) request.get("description");
 		String logo = (String) request.get("logo");
-		java.sql.Date dateDeCreation = request.get("dateDeCreation") != null
+		Date dateDeCreation = request.get("dateDeCreation") != null
 				? dateFormat((String) request.get("dateDeCreation"))
 				: null;
 		List<String> listTech = (List<String>) request.get("listTech");
@@ -217,6 +216,15 @@ public class EntrepriseController {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEntreprise(@PathParam("id") int id) {
+		 String query1 = "DELETE FROM entreprise_technologie WHERE id_entreprise = ?;";
+			try {
+				PreparedStatement stmt1 = conn.prepareStatement(query1);
+				stmt1.setInt(1, id);
+	            stmt1.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
 		String query = "DELETE FROM entreprise WHERE id = ?";
 		try (PreparedStatement stmt = conn.prepareStatement(query)) {
 			stmt.setInt(1, id);

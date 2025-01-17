@@ -11,12 +11,13 @@ public class Technologie {
     private String plateformSupporte;
     private String siteWeb;
     private Date dateDerniereMAJ;
+    private String logo;
 
     public Technologie() {
     }
 
     public Technologie(int id, String nomTech, String version, String description, String plateformSupporte,
-			String siteWeb, Date dateDerniereMAJ) {
+			String siteWeb, Date dateDerniereMAJ, String logo) {
 		super();
 		this.id = id;
 		this.nomTech = nomTech;
@@ -25,6 +26,7 @@ public class Technologie {
 		this.plateformSupporte = plateformSupporte;
 		this.siteWeb = siteWeb;
 		this.dateDerniereMAJ = dateDerniereMAJ;
+		this.logo = logo;
 	}
 
 	public String getVersion() {
@@ -82,8 +84,17 @@ public class Technologie {
     public void setNomTech(String nomTech) {
         this.nomTech = nomTech;
     }
+    
 
-    @Override
+    public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	@Override
     public String toString() {
         return "Technologie{id=" + id + ", nomTech='" + nomTech + "'}";
     }

@@ -2,7 +2,6 @@ package iit.project.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-
 import java.util.Properties;
 import java.io.InputStream;
 

@@ -10,6 +10,10 @@ public class Entreprise {
     private String email;
     private String numTel;
     private String description;
+    private Date dateDeCreation;
+    private String logo;
+    private List<Technologie> listTech;
+    
     public String getEmail() {
 		return email;
 	}
@@ -57,10 +61,6 @@ public class Entreprise {
 	public void setListTech(List<Technologie> listTech) {
 		this.listTech = listTech;
 	}
-
-	private Date dateDeCreation;
-    private String logo;
-    private List<Technologie> listTech;
 
     public Entreprise() {
         
